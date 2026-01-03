@@ -1,0 +1,118 @@
+// Prisma Schema for Zionlight Family Foundation
+// Phase 1: Core models for admin, programs, team, and gallery
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ADMIN USER MODEL
+// ============================================
+// Admin-only authentication - no public users
+// Email/password with secure hashing
+
+model AdminUser {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  password  String   // bcrypt hashed
+  name      String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime?
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+// ============================================
+// PROGRAM MODEL
+// ============================================
+// Foundation programs and initiatives
+
+model Program {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  slug        String   @unique
+  description String   @db.Text
+  content     String?  @db.Text // Rich text content for detail page
+  
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0) // For custom sorting
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+
+  @@map("programs")
+}
+
+// ============================================
+// TEAM MEMBER MODEL
+// ============================================
+// Foundation team and leadership
+
+model TeamMember {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  role      String   // Position/title
+  bio       String?  @db.Text
+  
+  imageUrl  String?
+  email     String?
+  phone     String?
+  
+  // Social links - extensible for future
+  linkedIn  String?
+  twitter   String?
+  
+  isActive  Boolean  @default(true)
+  isFeatured Boolean @default(false) // Show on homepage
+  order     Int      @default(0) // For custom sorting
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+// ============================================
+// GALLERY ITEM MODEL
+// ============================================
+// Photos and media for the gallery
+
+model GalleryItem {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  description String?  @db.Text
+  
+  imageUrl    String
+  thumbnailUrl String? // Optimized thumbnail
+  
+  category    String?  // For filtering (events, programs, etc.)
+  tags        String[] // For flexible categorization
+  
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  order       Int      @default(0)
+  
+  takenAt     DateTime? // When the photo was taken
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("gallery_items")
+}

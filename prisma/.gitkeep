@@ -1,9 +1,0 @@
-/**
- * Prisma Directory Placeholder
- * Schema will be added in future phases
- * 
- * This directory will contain:
- * - schema.prisma: Database schema definition
- * - migrations/: Database migration files
- * - seed.ts: Database seeding script
- */

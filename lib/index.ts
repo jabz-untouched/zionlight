@@ -4,3 +4,5 @@
  */
 
 export { api } from "./axios";
+export { db } from "./db";
+export * from "./auth";
