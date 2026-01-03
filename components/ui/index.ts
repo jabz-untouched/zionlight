@@ -1,6 +1,27 @@
 /**
  * UI Components Barrel Export
- * Shared, reusable UI primitives built on Radix UI
+ * Shared, reusable UI primitives and motion components
  */
 
-export {};
+// Motion components
+export { 
+  MotionSection, 
+  MotionDiv, 
+  StaggerContainer, 
+  StaggerItem,
+  fadeInUp,
+  fadeIn,
+  scaleIn,
+  staggerContainer,
+} from "./motion";
+
+// UI Primitives
+export { 
+  Section, 
+  Container, 
+  SectionHeader, 
+  Button, 
+  Card, 
+  Badge,
+  Divider,
+} from "./primitives";

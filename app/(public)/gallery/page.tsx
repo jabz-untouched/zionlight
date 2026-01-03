@@ -1,15 +1,83 @@
 import type { Metadata } from "next";
+import { db } from "@/lib/db";
+import { 
+  Section, 
+  Container, 
+  Badge,
+} from "@/components/ui";
+import { MotionDiv } from "@/components/ui";
+import { GalleryGrid } from "./_components/gallery-grid";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Gallery",
-  description: "See our impact through photos and stories from the community.",
+  title: "Gallery | Zionlight Family Foundation",
+  description: "See our impact through photos and stories from our community programs and events.",
 };
 
-export default function GalleryPage() {
+async function getGalleryItems() {
+  return db.galleryItem.findMany({
+    where: { isActive: true },
+    orderBy: [
+      { isFeatured: "desc" },
+      { order: "asc" },
+      { createdAt: "desc" },
+    ],
+  });
+}
+
+async function getCategories() {
+  const items = await db.galleryItem.findMany({
+    where: { isActive: true, category: { not: null } },
+    select: { category: true },
+    distinct: ["category"],
+  });
+  return items.map(i => i.category).filter(Boolean) as string[];
+}
+
+export default async function GalleryPage() {
+  const [items, categories] = await Promise.all([
+    getGalleryItems(),
+    getCategories(),
+  ]);
+
   return (
-    <section className="container mx-auto px-4 py-24">
-      <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Gallery</h1>
-      {/* Gallery content will be dynamic in future phases */}
-    </section>
+    <>
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
+        <Container className="relative z-10">
+          <MotionDiv className="max-w-3xl">
+            <Badge variant="primary" className="mb-4">Our Moments</Badge>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+              Gallery
+            </h1>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Capturing moments of hope, transformation, and community. 
+              Each image tells a story of lives touched and communities strengthened.
+            </p>
+          </MotionDiv>
+        </Container>
+      </section>
+
+      {/* Gallery Grid */}
+      <Section>
+        <Container size="lg">
+          {items.length > 0 ? (
+            <GalleryGrid items={items} categories={categories} />
+          ) : (
+            <div className="text-center py-20">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
+                <span className="text-3xl">📷</span>
+              </div>
+              <h2 className="text-2xl font-semibold mb-2">No Images Yet</h2>
+              <p className="text-muted-foreground">
+                We&apos;re working on adding photos. Check back soon!
+              </p>
+            </div>
+          )}
+        </Container>
+      </Section>
+    </>
   );
 }
