@@ -2,6 +2,10 @@ import type { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 import { DEFAULT_SEO } from "@/lib/seo";
 
+// Force dynamic generation to avoid build-time DB access
+export const dynamic = "force-dynamic";
+export const revalidate = 3600; // Revalidate every hour
+
 /**
  * Dynamic sitemap generation
  * Includes all public pages, blog posts, and events
