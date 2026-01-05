@@ -25,3 +25,6 @@ export {
   Badge,
   Divider,
 } from "./primitives";
+
+// Countdown Timer
+export { CountdownTimer } from "./countdown-timer";

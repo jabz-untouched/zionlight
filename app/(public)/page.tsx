@@ -7,7 +7,8 @@ import {
   Container, 
   SectionHeader, 
   Button, 
-  Card 
+  Card,
+  CountdownTimer,
 } from "@/components/ui";
 import { 
   MotionSection, 
@@ -181,6 +182,21 @@ export default async function HomePage() {
           </MotionDiv>
         </Container>
       </HeroSection>
+
+      {/* Event Countdown Timer */}
+      {events.length > 0 && events[0] && (
+        <Section className="py-12">
+          <Container className="max-w-3xl">
+            <MotionDiv variant="fadeInUp">
+              <CountdownTimer
+                targetDate={events[0].startDate}
+                eventTitle={events[0].translations[0]?.title || "Upcoming Event"}
+                eventSlug={events[0].slug}
+              />
+            </MotionDiv>
+          </Container>
+        </Section>
+      )}
 
       {/* Mission Statement */}
       <MotionSection className="py-20 bg-muted/30">
