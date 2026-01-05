@@ -76,6 +76,116 @@ async function main() {
 
   console.log("✅ Created sample gallery item:", galleryItem.title);
 
+  // Create managed images
+  const heroImage = await prisma.managedImage.upsert({
+    where: { key: "home-hero" },
+    update: {},
+    create: {
+      key: "home-hero",
+      title: "Homepage Hero Image",
+      description: "Main hero image for the homepage",
+      altText: "Zionlight Family Foundation - Building bridges of hope",
+      imageUrl: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80",
+      context: "HERO",
+      position: "CENTER",
+      isActive: true,
+      order: 1,
+    },
+  });
+
+  console.log("✅ Created hero image:", heroImage.title);
+
+  const globalFallback = await prisma.managedImage.upsert({
+    where: { key: "global-fallback" },
+    update: {},
+    create: {
+      key: "global-fallback",
+      title: "Global Fallback Image",
+      description: "Default placeholder image used when no image is available",
+      altText: "Zionlight Family Foundation",
+      imageUrl: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&q=80",
+      context: "GLOBAL",
+      position: "CENTER",
+      isActive: true,
+      order: 1,
+    },
+  });
+
+  console.log("✅ Created global fallback image:", globalFallback.title);
+
+  const aboutFeature = await prisma.managedImage.upsert({
+    where: { key: "home-about-feature" },
+    update: {},
+    create: {
+      key: "home-about-feature",
+      title: "About Section Feature",
+      description: "Feature image for the homepage about section",
+      altText: "Our mission in action",
+      imageUrl: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80",
+      context: "HOME",
+      position: "CENTER",
+      isActive: true,
+      order: 1,
+    },
+  });
+
+  console.log("✅ Created about feature image:", aboutFeature.title);
+
+  const ctaFeature = await prisma.managedImage.upsert({
+    where: { key: "home-cta-feature" },
+    update: {},
+    create: {
+      key: "home-cta-feature",
+      title: "CTA Section Feature",
+      description: "Feature image for the homepage call-to-action section",
+      altText: "Join our community",
+      imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+      context: "HOME",
+      position: "CENTER",
+      isActive: true,
+      order: 2,
+    },
+  });
+
+  console.log("✅ Created CTA feature image:", ctaFeature.title);
+
+  // Create additional hero images for the slider
+  const heroImage2 = await prisma.managedImage.upsert({
+    where: { key: "home-hero-2" },
+    update: {},
+    create: {
+      key: "home-hero-2",
+      title: "Community Together",
+      description: "Hero slide showing community unity",
+      altText: "Community members coming together in faith",
+      imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80",
+      context: "HERO",
+      position: "CENTER",
+      isActive: true,
+      order: 2,
+    },
+  });
+
+  console.log("✅ Created hero slide 2:", heroImage2.title);
+
+  const heroImage3 = await prisma.managedImage.upsert({
+    where: { key: "home-hero-3" },
+    update: {},
+    create: {
+      key: "home-hero-3",
+      title: "Empowering Youth",
+      description: "Hero slide featuring youth programs",
+      altText: "Youth empowerment and education programs",
+      imageUrl: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920&q=80",
+      context: "HERO",
+      position: "CENTER",
+      isActive: true,
+      order: 3,
+    },
+  });
+
+  console.log("✅ Created hero slide 3:", heroImage3.title);
+
   console.log("🎉 Seeding completed!");
 }
 

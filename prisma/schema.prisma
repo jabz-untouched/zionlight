@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ============================================
@@ -115,4 +116,45 @@ model GalleryItem {
   updatedAt   DateTime  @updatedAt
 
   @@map("gallery_items")
+}
+
+// ============================================
+// MANAGED IMAGE MODEL
+// ============================================
+// Dynamic images managed from admin dashboard
+// Used for hero sections, homepage features, and global placeholders
+
+model ManagedImage {
+  id          String       @id @default(uuid()) @db.Uuid
+  key         String       @unique // e.g., "home-hero", "home-feature-1", "global-placeholder"
+  title       String
+  description String?      @db.Text
+  altText     String?      // Accessibility alt text
+  
+  imageUrl    String
+  
+  context     ImageContext @default(HOME)
+  position    TextPosition @default(CENTER) // For hero text overlay positioning
+  
+  isActive    Boolean      @default(true)
+  order       Int          @default(0) // For future slider/carousel support
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([context, isActive])
+  @@index([key])
+  @@map("managed_images")
+}
+
+enum ImageContext {
+  HERO    // Hero section images
+  HOME    // Homepage feature images
+  GLOBAL  // Global placeholders/fallbacks
+}
+
+enum TextPosition {
+  LEFT
+  CENTER
+  RIGHT
 }

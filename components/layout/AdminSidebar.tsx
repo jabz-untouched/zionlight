@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin/programs", label: "Programs", icon: "📋" },
   { href: "/admin/team", label: "Team", icon: "👥" },
   { href: "/admin/gallery", label: "Gallery", icon: "🖼️" },
+  { href: "/admin/media", label: "Media", icon: "🎨" },
 ];
 
 export function AdminSidebar() {

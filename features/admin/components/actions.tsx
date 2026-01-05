@@ -90,3 +90,31 @@ export function ToggleButton({ id, isActive, onToggle }: ToggleButtonProps) {
     </Button>
   );
 }
+
+// Alias for managed images (activate/deactivate terminology)
+export function ToggleActiveButton({ id, isActive, onToggle }: ToggleButtonProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleToggle = () => {
+    startTransition(async () => {
+      const result = await onToggle(id);
+      if (result.success) {
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to toggle status");
+      }
+    });
+  };
+
+  return (
+    <Button
+      size="sm"
+      variant="ghost"
+      onClick={handleToggle}
+      disabled={isPending}
+    >
+      {isPending ? "..." : isActive ? "Deactivate" : "Activate"}
+    </Button>
+  );
+}

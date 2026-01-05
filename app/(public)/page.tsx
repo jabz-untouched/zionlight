@@ -15,6 +15,11 @@ import {
   StaggerContainer, 
   StaggerItem 
 } from "@/components/ui";
+import {
+  HeroSection,
+  getGlobalFallbackImage,
+  getManagedImagesByContext,
+} from "@/components/media";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
 };
 
 async function getFeaturedContent() {
-  const [programs, teamMembers] = await Promise.all([
+  const [programs, teamMembers, homeImages, globalFallback] = await Promise.all([
     db.program.findMany({
       where: { isActive: true, isFeatured: true },
       orderBy: { order: "asc" },
@@ -35,28 +40,25 @@ async function getFeaturedContent() {
       orderBy: { order: "asc" },
       take: 4,
     }),
+    getManagedImagesByContext("HOME"),
+    getGlobalFallbackImage(),
   ]);
 
-  return { programs, teamMembers };
+  return { programs, teamMembers, homeImages, globalFallback };
 }
 
 export default async function HomePage() {
-  const { programs, teamMembers } = await getFeaturedContent();
+  const { programs, teamMembers, globalFallback } = await getFeaturedContent();
+  
+  const fallbackImageUrl = globalFallback?.imageUrl;
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
-        
-        {/* Decorative elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
-        
-        <Container className="relative z-10 text-center py-20">
+      {/* Hero Section with Dynamic Image */}
+      <HeroSection overlayOpacity={0.4}>
+        <Container className="py-20">
           <MotionDiv variant="fadeInUp">
-            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
               Empowering Communities Since 2010
             </span>
           </MotionDiv>
@@ -84,7 +86,7 @@ export default async function HomePage() {
             </Button>
           </MotionDiv>
         </Container>
-      </section>
+      </HeroSection>
 
       {/* Mission Statement */}
       <MotionSection className="py-20 bg-muted/30">
@@ -120,23 +122,22 @@ export default async function HomePage() {
                 <StaggerItem key={program.id}>
                   <Link href={`/programs/${program.slug}`}>
                     <Card hover className="h-full">
-                      {program.imageUrl && (
-                        <div className="relative h-48 bg-muted">
+                      <div className="relative h-48 bg-muted">
+                        {(program.imageUrl || fallbackImageUrl) ? (
                           <Image
-                            src={program.imageUrl}
+                            src={program.imageUrl || fallbackImageUrl!}
                             alt={program.title}
                             fill
                             className="object-cover"
                           />
-                        </div>
-                      )}
-                      {!program.imageUrl && (
-                        <div className="h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="text-2xl">🌟</span>
+                        ) : (
+                          <div className="h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+                              <span className="text-2xl">🌟</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                       <div className="p-6">
                         <h3 className="text-xl font-semibold mb-2">{program.title}</h3>
                         <p className="text-muted-foreground line-clamp-3">
@@ -200,9 +201,9 @@ export default async function HomePage() {
                 <StaggerItem key={member.id}>
                   <div className="text-center group">
                     <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden bg-muted">
-                      {member.imageUrl ? (
+                      {(member.imageUrl || fallbackImageUrl) ? (
                         <Image
-                          src={member.imageUrl}
+                          src={member.imageUrl || fallbackImageUrl!}
                           alt={member.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
