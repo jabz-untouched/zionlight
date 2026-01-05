@@ -16,6 +16,7 @@ import {
   StaggerItem 
 } from "@/components/ui";
 import { getPageSectionsByKeys } from "@/features/admin/actions/content";
+import { getManagedImage } from "@/components/media";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ Today, we continue to expand our reach while staying true to our founding princi
 };
 
 async function getAboutData() {
-  const [teamMembers, aboutContent] = await Promise.all([
+  const [teamMembers, aboutContent, storyImage] = await Promise.all([
     db.teamMember.findMany({
       where: { isActive: true },
       orderBy: { order: "asc" },
@@ -76,13 +77,14 @@ async function getAboutData() {
       "director-message",
       "cta"
     ]),
+    getManagedImage("about-story"),
   ]);
   
-  return { teamMembers, aboutContent };
+  return { teamMembers, aboutContent, storyImage };
 }
 
 export default async function AboutPage() {
-  const { teamMembers, aboutContent } = await getAboutData();
+  const { teamMembers, aboutContent, storyImage } = await getAboutData();
   
   // Extract content with fallbacks
   const heroContent = aboutContent["hero"];
@@ -144,13 +146,24 @@ export default async function AboutPage() {
               </div>
             </MotionDiv>
             <MotionDiv delay={0.2}>
-              <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-4xl">🌟</span>
+              <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+                {storyImage?.imageUrl ? (
+                  <Image
+                    src={storyImage.imageUrl}
+                    alt={storyImage.altText || "Our Story"}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center p-8">
+                      <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-4xl">🌟</span>
+                      </div>
+                      <p className="text-lg font-medium">Serving Since 2010</p>
+                    </div>
                   </div>
-                  <p className="text-lg font-medium">Serving Since 2010</p>
-                </div>
+                )}
               </div>
             </MotionDiv>
           </div>
