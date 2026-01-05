@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -24,11 +25,17 @@ export function Header() {
       <nav className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-lg">Z</span>
+          <div className="relative w-12 h-12">
+            <Image
+              src="/logo.png"
+              alt="Zionlight Family Foundation"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
           <span className="font-semibold text-lg hidden sm:block group-hover:text-primary transition-colors">
-            Zionlight
+            Zionlight Family Foundation
           </span>
         </Link>
 

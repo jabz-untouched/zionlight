@@ -46,6 +46,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         {/* Analytics script - loads non-blocking after page interactive */}
         <AnalyticsScript />
       </head>

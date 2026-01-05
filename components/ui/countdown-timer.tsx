@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { cn } from "@/utils/cn";
 
 interface CountdownTimerProps {
   targetDate: Date | string;
   eventTitle: string;
   eventSlug: string;
+  backgroundImage?: string | null;
   className?: string;
 }
 
@@ -36,6 +38,7 @@ export function CountdownTimer({
   targetDate, 
   eventTitle, 
   eventSlug,
+  backgroundImage,
   className 
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
@@ -102,8 +105,24 @@ export function CountdownTimer({
   ];
 
   return (
-    <div className={cn("bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 rounded-2xl p-6 md:p-8", className)}>
-      <div className="text-center">
+    <div className={cn("relative overflow-hidden rounded-2xl p-6 md:p-8", className)}>
+      {/* Background Image */}
+      {backgroundImage && (
+        <div className="absolute inset-0">
+          <Image
+            src={backgroundImage}
+            alt=""
+            fill
+            className="object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/80 to-background/90" />
+        </div>
+      )}
+      {!backgroundImage && (
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10" />
+      )}
+      
+      <div className="relative z-10 text-center">
         <p className="text-sm text-muted-foreground mb-1">Upcoming Event</p>
         <a 
           href={`/events/${eventSlug}`}

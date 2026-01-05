@@ -192,6 +192,7 @@ export default async function HomePage() {
                 targetDate={events[0].startDate}
                 eventTitle={events[0].translations[0]?.title || "Upcoming Event"}
                 eventSlug={events[0].slug}
+                backgroundImage={events[0].bannerImage}
               />
             </MotionDiv>
           </Container>
