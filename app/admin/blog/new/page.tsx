@@ -3,6 +3,9 @@ import { db } from "@/lib/db";
 import { PageHeader } from "@/features/admin/components";
 import { BlogPostForm } from "../_components/blog-post-form";
 
+// Force dynamic rendering - this page fetches from database
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "New Blog Post",
   description: "Create a new blog post.",
