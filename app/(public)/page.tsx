@@ -138,7 +138,7 @@ export default async function HomePage() {
       <HeroSection overlayOpacity={0.4}>
         <Container className="py-20">
           <MotionDiv variant="fadeInUp">
-            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
+            <span className="inline-block px-4 py-2 bg-white/10 text-white rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
               {heroContent?.subtitle || defaultContent.hero.badge}
             </span>
           </MotionDiv>
@@ -166,7 +166,7 @@ export default async function HomePage() {
           </MotionDiv>
           
           <MotionDiv variant="fadeInUp" delay={0.2}>
-            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
+            <p className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-white/90 leading-relaxed">
               {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
