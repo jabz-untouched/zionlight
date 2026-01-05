@@ -55,18 +55,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // If this is a HERO image being activated, deactivate other active HERO images
-    if (validated.context === "HERO" && validated.isActive) {
-      await db.managedImage.updateMany({
-        where: { 
-          context: "HERO", 
-          isActive: true,
-          id: { not: id }
-        },
-        data: { isActive: false },
-      });
-    }
-
     // If this is a GLOBAL fallback being activated, deactivate other active GLOBAL images
     if (validated.context === "GLOBAL" && validated.isActive) {
       await db.managedImage.updateMany({
@@ -123,18 +111,6 @@ export async function PATCH(_request: NextRequest, { params }: RouteParams) {
     }
 
     const newActiveState = !image.isActive;
-
-    // If activating a HERO image, deactivate other active HERO images
-    if (image.context === "HERO" && newActiveState) {
-      await db.managedImage.updateMany({
-        where: { 
-          context: "HERO", 
-          isActive: true,
-          id: { not: id }
-        },
-        data: { isActive: false },
-      });
-    }
 
     // If activating a GLOBAL image, deactivate other active GLOBAL images
     if (image.context === "GLOBAL" && newActiveState) {

@@ -47,14 +47,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = managedImageSchema.parse(body);
 
-    // If this is a HERO image and it's active, deactivate other active HERO images
-    if (validated.context === "HERO" && validated.isActive) {
-      await db.managedImage.updateMany({
-        where: { context: "HERO", isActive: true },
-        data: { isActive: false },
-      });
-    }
-
     // If this is a GLOBAL fallback and it's active, deactivate other active GLOBAL images
     if (validated.context === "GLOBAL" && validated.isActive) {
       await db.managedImage.updateMany({

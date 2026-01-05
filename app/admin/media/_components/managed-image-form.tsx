@@ -237,8 +237,8 @@ export function ManagedImageForm({ initialData }: ManagedImageFormProps) {
           />
           
           {selectedContext === "HERO" && (
-            <p className="text-sm text-amber-600 dark:text-amber-400">
-              ⚠️ Only one HERO image can be active at a time. Activating this will deactivate others.
+            <p className="text-sm text-blue-600 dark:text-blue-400">
+              ℹ️ Multiple HERO images can be active to create a slider. Use the Order field to control slide sequence.
             </p>
           )}
         </div>

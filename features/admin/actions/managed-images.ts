@@ -131,18 +131,6 @@ export async function toggleManagedImageActive(id: string): Promise<ActionResult
 
     const newActiveState = !image.isActive;
 
-    // If activating a HERO image, deactivate other active HERO images
-    if (image.context === "HERO" && newActiveState) {
-      await db.managedImage.updateMany({
-        where: { 
-          context: "HERO", 
-          isActive: true,
-          id: { not: id }
-        },
-        data: { isActive: false },
-      });
-    }
-
     const updated = await db.managedImage.update({
       where: { id },
       data: { isActive: newActiveState },
