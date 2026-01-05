@@ -148,7 +148,7 @@ export default async function HomePage() {
               {heroContent?.title ? (
                 heroContent.title.includes("|") ? (
                   <>
-                    {heroContent.title.split("|")[0].trim()}
+                    {heroContent.title.split("|")[0]?.trim()}
                     <span className="block text-primary">
                       {heroContent.title.split("|")[1]?.trim()}
                     </span>
