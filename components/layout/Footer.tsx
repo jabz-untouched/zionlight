@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getSiteSettings } from "@/features/admin/actions/site-settings";
 
 // Default tagline
@@ -63,8 +64,13 @@ export async function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">Z</span>
+              <div className="relative w-10 h-10 shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="Zionlight Family Foundation"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="font-semibold text-lg">Zionlight Family Foundation</span>
             </Link>
