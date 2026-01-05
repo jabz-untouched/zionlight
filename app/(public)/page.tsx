@@ -146,12 +146,16 @@ export default async function HomePage() {
           <MotionDiv variant="fadeInUp" delay={0.1}>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
               {heroContent?.title ? (
-                <>
-                  {heroContent.title.split(" ").slice(0, 3).join(" ")}
-                  <span className="block text-primary">
-                    {heroContent.title.split(" ").slice(3).join(" ") || "Hope & Faith"}
-                  </span>
-                </>
+                heroContent.title.includes("|") ? (
+                  <>
+                    {heroContent.title.split("|")[0].trim()}
+                    <span className="block text-primary">
+                      {heroContent.title.split("|")[1]?.trim()}
+                    </span>
+                  </>
+                ) : (
+                  heroContent.title
+                )
               ) : (
                 <>
                   Building Bridges of
