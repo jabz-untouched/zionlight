@@ -183,7 +183,7 @@ export function HeroSlider({
           position === "LEFT" && "text-left",
           position === "CENTER" && "text-center",
           position === "RIGHT" && "text-right",
-          hasImages && "text-white"
+          hasImages && "text-white [text-shadow:_0_2px_8px_rgba(0,0,0,0.7),_0_4px_16px_rgba(0,0,0,0.5)]"
         )}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
