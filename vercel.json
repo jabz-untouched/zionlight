@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "regions": ["iad1"],
+  "crons": [],
+  "functions": {
+    "app/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}

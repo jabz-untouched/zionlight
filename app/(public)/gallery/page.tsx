@@ -7,6 +7,7 @@ import {
 } from "@/components/ui";
 import { MotionDiv } from "@/components/ui";
 import { GalleryGrid } from "./_components/gallery-grid";
+import { getPageSectionsByKeys } from "@/features/admin/actions/content";
 
 export const dynamic = "force-dynamic";
 
@@ -15,31 +16,40 @@ export const metadata: Metadata = {
   description: "See our impact through photos and stories from our community programs and events.",
 };
 
-async function getGalleryItems() {
-  return db.galleryItem.findMany({
-    where: { isActive: true },
-    orderBy: [
-      { isFeatured: "desc" },
-      { order: "asc" },
-      { createdAt: "desc" },
-    ],
-  });
-}
+// Default content fallbacks
+const defaultContent = {
+  hero: {
+    title: "Gallery",
+    body: "Capturing moments of hope, transformation, and community. Each image tells a story of lives touched and communities strengthened.",
+  },
+};
 
-async function getCategories() {
-  const items = await db.galleryItem.findMany({
-    where: { isActive: true, category: { not: null } },
-    select: { category: true },
-    distinct: ["category"],
-  });
-  return items.map(i => i.category).filter(Boolean) as string[];
+async function getGalleryData() {
+  const [items, categories, galleryContent] = await Promise.all([
+    db.galleryItem.findMany({
+      where: { isActive: true },
+      orderBy: [
+        { isFeatured: "desc" },
+        { order: "asc" },
+        { createdAt: "desc" },
+      ],
+    }),
+    db.galleryItem.findMany({
+      where: { isActive: true, category: { not: null } },
+      select: { category: true },
+      distinct: ["category"],
+    }).then(items => items.map(i => i.category).filter(Boolean) as string[]),
+    getPageSectionsByKeys("gallery", ["hero", "intro"]),
+  ]);
+  
+  return { items, categories, galleryContent };
 }
 
 export default async function GalleryPage() {
-  const [items, categories] = await Promise.all([
-    getGalleryItems(),
-    getCategories(),
-  ]);
+  const { items, categories, galleryContent } = await getGalleryData();
+  
+  // Extract content with fallbacks
+  const heroContent = galleryContent["hero"];
 
   return (
     <>
@@ -50,11 +60,10 @@ export default async function GalleryPage() {
           <MotionDiv className="max-w-3xl">
             <Badge variant="primary" className="mb-4">Our Moments</Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              Gallery
+              {heroContent?.title || defaultContent.hero.title}
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Capturing moments of hope, transformation, and community. 
-              Each image tells a story of lives touched and communities strengthened.
+              {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
         </Container>

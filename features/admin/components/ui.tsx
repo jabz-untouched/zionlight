@@ -190,7 +190,7 @@ export function Checkbox({ label, className, ...props }: CheckboxProps) {
 }
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger" | "ghost";
+  variant?: "primary" | "secondary" | "danger" | "ghost" | "outline" | "destructive";
   size?: "sm" | "md";
   loading?: boolean;
 }
@@ -213,9 +213,9 @@ export function Button({
           "bg-primary text-primary-foreground hover:bg-primary/90":
             variant === "primary",
           "border border-border bg-background hover:bg-muted":
-            variant === "secondary",
+            variant === "secondary" || variant === "outline",
           "bg-destructive text-white hover:bg-destructive/90":
-            variant === "danger",
+            variant === "danger" || variant === "destructive",
           "hover:bg-muted": variant === "ghost",
         },
         {
@@ -243,4 +243,28 @@ export function Card({ children, className }: CardProps) {
       {children}
     </div>
   );
+}
+
+interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  children: React.ReactNode;
+}
+
+export function Label({ children, className, ...props }: LabelProps) {
+  return (
+    <label
+      className={cn("text-sm font-medium", className)}
+      {...props}
+    >
+      {children}
+    </label>
+  );
+}
+
+interface FormErrorProps {
+  message?: string;
+}
+
+export function FormError({ message }: FormErrorProps) {
+  if (!message) return null;
+  return <p className="text-xs text-destructive">{message}</p>;
 }

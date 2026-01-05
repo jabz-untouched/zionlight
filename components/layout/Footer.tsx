@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/features/admin/actions/site-settings";
+
+// Default tagline
+const defaultTagline = "Empowering communities through faith, love, and dedicated service. Building bridges of hope for a brighter tomorrow.";
 
 const footerLinks = {
   organization: [
@@ -10,11 +14,6 @@ const footerLinks = {
   legal: [
     { href: "/legal#privacy", label: "Privacy Policy" },
     { href: "/legal#terms", label: "Terms of Service" },
-  ],
-  social: [
-    { href: "https://facebook.com", label: "Facebook", icon: "facebook" },
-    { href: "https://instagram.com", label: "Instagram", icon: "instagram" },
-    { href: "https://twitter.com", label: "Twitter", icon: "twitter" },
   ],
 };
 
@@ -39,7 +38,24 @@ function SocialIcon({ name }: { name: string }) {
   return <>{icons[name]}</>;
 }
 
-export function Footer() {
+export async function Footer() {
+  // Fetch site settings for dynamic content
+  const siteSettings = await getSiteSettings([
+    "footer-tagline",
+    "social-facebook",
+    "social-instagram",
+    "social-twitter",
+  ]);
+  
+  const tagline = siteSettings["footer-tagline"] || defaultTagline;
+  
+  // Build social links from settings
+  const socialLinks = [
+    { href: siteSettings["social-facebook"] || "https://facebook.com", label: "Facebook", icon: "facebook" },
+    { href: siteSettings["social-instagram"] || "https://instagram.com", label: "Instagram", icon: "instagram" },
+    { href: siteSettings["social-twitter"] || "https://twitter.com", label: "Twitter", icon: "twitter" },
+  ];
+
   return (
     <footer className="border-t border-border/40 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -53,12 +69,11 @@ export function Footer() {
               <span className="font-semibold text-lg">Zionlight Family Foundation</span>
             </Link>
             <p className="text-muted-foreground max-w-md mb-6">
-              Empowering communities through faith, love, and dedicated service. 
-              Building bridges of hope for a brighter tomorrow.
+              {tagline}
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-4">
-              {footerLinks.social.map((link) => (
+              {socialLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}

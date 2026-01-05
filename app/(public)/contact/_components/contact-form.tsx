@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { trackContactFormSubmit } from "@/lib/analytics";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -35,6 +36,7 @@ export function ContactForm() {
     
     setIsSubmitted(true);
     reset();
+    trackContactFormSubmit(true);
     
     // Reset success message after 5 seconds
     setTimeout(() => setIsSubmitted(false), 5000);

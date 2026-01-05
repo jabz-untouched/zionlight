@@ -6,10 +6,14 @@ import { cn } from "@/utils/cn";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
+  { href: "/admin/content", label: "Content", icon: "📝" },
   { href: "/admin/programs", label: "Programs", icon: "📋" },
+  { href: "/admin/blog", label: "Blog", icon: "✍️" },
+  { href: "/admin/events", label: "Events", icon: "📅" },
   { href: "/admin/team", label: "Team", icon: "👥" },
   { href: "/admin/gallery", label: "Gallery", icon: "🖼️" },
   { href: "/admin/media", label: "Media", icon: "🎨" },
+  { href: "/admin/settings", label: "Settings", icon: "⚙️" },
 ];
 
 export function AdminSidebar() {

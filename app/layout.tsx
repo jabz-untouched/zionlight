@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { MotionProvider } from "@/components/providers";
+import { AnalyticsScript } from "@/components/analytics";
+import { generateMetadata as generateSEO, DEFAULT_SEO } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,25 +11,22 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+/**
+ * Root metadata - uses SEO utility for consistency
+ * Individual pages override with their own generateMetadata
+ */
 export const metadata: Metadata = {
+  ...generateSEO({
+    title: DEFAULT_SEO.siteName,
+    description: DEFAULT_SEO.siteDescription,
+    canonicalUrl: DEFAULT_SEO.siteUrl,
+  }),
+  // Template for child pages
   title: {
-    default: "Zionlight Family Foundation",
-    template: "%s | Zionlight Family Foundation",
+    default: DEFAULT_SEO.siteName,
+    template: `%s | ${DEFAULT_SEO.siteName}`,
   },
-  description: "Empowering communities through compassion and sustainable development.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    siteName: "Zionlight Family Foundation",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  metadataBase: new URL(DEFAULT_SEO.siteUrl),
 };
 
 export const viewport: Viewport = {
@@ -46,6 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* Analytics script - loads non-blocking after page interactive */}
+        <AnalyticsScript />
+      </head>
       <body className="antialiased">
         <MotionProvider>{children}</MotionProvider>
       </body>

@@ -15,6 +15,7 @@ import {
   StaggerContainer, 
   StaggerItem 
 } from "@/components/ui";
+import { getPageSectionsByKeys } from "@/features/admin/actions/content";
 
 export const dynamic = "force-dynamic";
 
@@ -23,19 +24,92 @@ export const metadata: Metadata = {
   description: "Learn about our mission, vision, values, and the dedicated team behind Zionlight Family Foundation.",
 };
 
-async function getTeamMembers() {
-  return db.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: { order: "asc" },
-  });
+// Default content fallbacks
+const defaultContent = {
+  hero: {
+    title: "Who We Are",
+    body: "Zionlight Family Foundation is a faith-based non-profit organization committed to transforming communities through compassion, service, and unwavering dedication to human dignity.",
+  },
+  story: {
+    title: "Our Story",
+    body: `Founded in 2010, Zionlight Family Foundation emerged from a simple yet powerful vision: to be a beacon of hope for families and communities in need. What began as a small group of dedicated volunteers has grown into a thriving organization touching thousands of lives.
+
+Our journey has been marked by countless stories of transformation—children receiving education, families finding stability, and communities discovering their collective strength. Each milestone reinforces our commitment to serving with love and integrity.
+
+Today, we continue to expand our reach while staying true to our founding principles: faith, family, and community service.`,
+  },
+  vision: {
+    title: "Our Vision",
+    body: "To see every family empowered, every community thriving, and every individual realizing their God-given potential. We envision a world where love transcends barriers and hope illuminates the darkest corners.",
+  },
+  mission: {
+    title: "Our Mission",
+    body: "To serve with love, uplift with faith, and empower with action—creating lasting change through educational initiatives, community programs, and spiritual support that honor the dignity of every person we serve.",
+  },
+  hemer: [
+    { letter: "H", word: "Humility", description: "Serving others with a humble heart" },
+    { letter: "E", word: "Excellence", description: "Striving for the highest standards" },
+    { letter: "M", word: "Mercy", description: "Extending grace and compassion" },
+    { letter: "E", word: "Empowerment", description: "Building capacity in communities" },
+    { letter: "R", word: "Resilience", description: "Persevering through challenges" },
+  ],
+  cta: {
+    title: "Join Our Journey",
+    body: "Whether you want to volunteer, partner with us, or simply learn more about our work, we'd love to connect with you.",
+    ctaText: "Get in Touch",
+    ctaLink: "/contact",
+  },
+};
+
+async function getAboutData() {
+  const [teamMembers, aboutContent] = await Promise.all([
+    db.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: { order: "asc" },
+    }),
+    getPageSectionsByKeys("about", [
+      "hero", 
+      "story", 
+      "vision", 
+      "mission", 
+      "hemer-values",
+      "director-message",
+      "cta"
+    ]),
+  ]);
+  
+  return { teamMembers, aboutContent };
 }
 
 export default async function AboutPage() {
-  const teamMembers = await getTeamMembers();
+  const { teamMembers, aboutContent } = await getAboutData();
+  
+  // Extract content with fallbacks
+  const heroContent = aboutContent["hero"];
+  const storyContent = aboutContent["story"];
+  const visionContent = aboutContent["vision"];
+  const missionContent = aboutContent["mission"];
+  const hemerContent = aboutContent["hemer-values"];
+  const ctaContent = aboutContent["cta"];
+  
+  // Parse HEMER values from metadata or use defaults
+  let hemerValues = defaultContent.hemer;
+  if (hemerContent?.metadata) {
+    try {
+      const parsed = typeof hemerContent.metadata === "string"
+        ? JSON.parse(hemerContent.metadata)
+        : hemerContent.metadata;
+      if (Array.isArray(parsed.values)) {
+        hemerValues = parsed.values;
+      }
+    } catch {
+      // Use defaults
+    }
+  }
   
   // Find director (if marked as featured or first member)
-  const director = teamMembers.find(m => m.role.toLowerCase().includes("director")) || teamMembers[0];
-  const otherMembers = teamMembers.filter(m => m.id !== director?.id);
+  const director = teamMembers.find((m: typeof teamMembers[0]) => m.role.toLowerCase().includes("director")) || teamMembers[0];
+  const otherMembers = teamMembers.filter((m: typeof teamMembers[0]) => m.id !== director?.id);
 
   return (
     <>
@@ -46,12 +120,10 @@ export default async function AboutPage() {
           <MotionDiv className="max-w-3xl">
             <Badge variant="primary" className="mb-4">About Us</Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              Who We Are
+              {heroContent?.title || defaultContent.hero.title}
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Zionlight Family Foundation is a faith-based non-profit organization committed 
-              to transforming communities through compassion, service, and unwavering dedication 
-              to human dignity.
+              {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
         </Container>
@@ -62,24 +134,13 @@ export default async function AboutPage() {
         <Container>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <MotionDiv>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Story</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                {storyContent?.title || defaultContent.story.title}
+              </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  Founded in 2010, Zionlight Family Foundation emerged from a simple yet powerful 
-                  vision: to be a beacon of hope for families and communities in need. What began 
-                  as a small group of dedicated volunteers has grown into a thriving organization 
-                  touching thousands of lives.
-                </p>
-                <p>
-                  Our journey has been marked by countless stories of transformation—children 
-                  receiving education, families finding stability, and communities discovering 
-                  their collective strength. Each milestone reinforces our commitment to serving 
-                  with love and integrity.
-                </p>
-                <p>
-                  Today, we continue to expand our reach while staying true to our founding 
-                  principles: faith, family, and community service.
-                </p>
+                {(storyContent?.body || defaultContent.story.body).split('\n\n').map((paragraph: string, idx: number) => (
+                  <p key={idx}>{paragraph}</p>
+                ))}
               </div>
             </MotionDiv>
             <MotionDiv delay={0.2}>
@@ -115,11 +176,11 @@ export default async function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
+                <h3 className="text-2xl font-bold mb-4">
+                  {visionContent?.title || defaultContent.vision.title}
+                </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  To see every family empowered, every community thriving, and every individual 
-                  realizing their God-given potential. We envision a world where love transcends 
-                  barriers and hope illuminates the darkest corners.
+                  {visionContent?.body || defaultContent.vision.body}
                 </p>
               </Card>
             </MotionDiv>
@@ -131,11 +192,11 @@ export default async function AboutPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
+                <h3 className="text-2xl font-bold mb-4">
+                  {missionContent?.title || defaultContent.mission.title}
+                </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  To serve with love, uplift with faith, and empower with action—creating lasting 
-                  change through educational initiatives, community programs, and spiritual support 
-                  that honor the dignity of every person we serve.
+                  {missionContent?.body || defaultContent.mission.body}
                 </p>
               </Card>
             </MotionDiv>
@@ -148,20 +209,14 @@ export default async function AboutPage() {
         <Container>
           <MotionDiv>
             <SectionHeader
-              subtitle="Our Values"
-              title="The HEMER Principles"
+              subtitle={hemerContent?.subtitle || "Our Values"}
+              title={hemerContent?.title || "The HEMER Principles"}
               description="Five core values that guide everything we do"
             />
           </MotionDiv>
 
           <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {[
-              { letter: "H", word: "Humility", description: "Serving others with a humble heart" },
-              { letter: "E", word: "Excellence", description: "Striving for the highest standards" },
-              { letter: "M", word: "Mercy", description: "Extending grace and compassion" },
-              { letter: "E", word: "Empowerment", description: "Building capacity in communities" },
-              { letter: "R", word: "Resilience", description: "Persevering through challenges" },
-            ].map((value) => (
+            {hemerValues.map((value) => (
               <StaggerItem key={value.letter}>
                 <Card className="p-6 text-center h-full">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
@@ -254,7 +309,7 @@ export default async function AboutPage() {
             </MotionDiv>
 
             <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {otherMembers.map((member) => (
+              {otherMembers.map((member: typeof teamMembers[0]) => (
                 <StaggerItem key={member.id}>
                   <Card hover className="overflow-hidden">
                     <div className="relative h-56 bg-muted">
@@ -321,18 +376,17 @@ export default async function AboutPage() {
         <Container className="text-center">
           <MotionDiv>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Join Our Journey
+              {ctaContent?.title || defaultContent.cta.title}
             </h2>
             <p className="max-w-2xl mx-auto text-lg text-primary-foreground/80 mb-8">
-              Whether you want to volunteer, partner with us, or simply learn more about our work, 
-              we&apos;d love to connect with you.
+              {ctaContent?.body || defaultContent.cta.body}
             </p>
             <Button 
-              href="/contact" 
+              href={ctaContent?.ctaLink || defaultContent.cta.ctaLink} 
               className="bg-background text-foreground hover:bg-background/90"
               size="lg"
             >
-              Get in Touch
+              {ctaContent?.ctaText || defaultContent.cta.ctaText}
             </Button>
           </MotionDiv>
         </Container>

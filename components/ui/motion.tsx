@@ -92,7 +92,7 @@ MotionSection.displayName = "MotionSection";
  * MotionDiv - A div wrapper with scroll-triggered animation
  */
 interface MotionDivProps extends HTMLMotionProps<"div"> {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   delay?: number;
   variant?: "fadeInUp" | "fadeIn" | "scaleIn";

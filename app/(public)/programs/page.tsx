@@ -13,6 +13,7 @@ import {
   StaggerContainer, 
   StaggerItem 
 } from "@/components/ui";
+import { getPageSectionsByKeys } from "@/features/admin/actions/content";
 
 export const dynamic = "force-dynamic";
 
@@ -21,15 +22,38 @@ export const metadata: Metadata = {
   description: "Discover our community programs and initiatives making a difference in lives across communities.",
 };
 
-async function getPrograms() {
-  return db.program.findMany({
-    where: { isActive: true },
-    orderBy: { order: "asc" },
-  });
+// Default content fallbacks
+const defaultContent = {
+  hero: {
+    title: "Our Programs",
+    body: "Through our diverse range of programs, we address the most pressing needs of our communities—from education and family support to spiritual growth and community development.",
+  },
+  cta: {
+    title: "Want to Get Involved?",
+    body: "Our programs thrive because of people like you. Whether you want to volunteer, partner, or support our work—there's a place for you.",
+    ctaText: "Contact Us",
+    ctaLink: "/contact",
+  },
+};
+
+async function getProgramsData() {
+  const [programs, programsContent] = await Promise.all([
+    db.program.findMany({
+      where: { isActive: true },
+      orderBy: { order: "asc" },
+    }),
+    getPageSectionsByKeys("programs", ["hero", "intro", "cta"]),
+  ]);
+  
+  return { programs, programsContent };
 }
 
 export default async function ProgramsPage() {
-  const programs = await getPrograms();
+  const { programs, programsContent } = await getProgramsData();
+  
+  // Extract content with fallbacks
+  const heroContent = programsContent["hero"];
+  const ctaContent = programsContent["cta"];
 
   return (
     <>
@@ -40,12 +64,10 @@ export default async function ProgramsPage() {
           <MotionDiv className="max-w-3xl">
             <Badge variant="primary" className="mb-4">Our Work</Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              Our Programs
+              {heroContent?.title || defaultContent.hero.title}
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Through our diverse range of programs, we address the most pressing needs 
-              of our communities—from education and family support to spiritual growth 
-              and community development.
+              {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
         </Container>
@@ -56,7 +78,7 @@ export default async function ProgramsPage() {
         <Container>
           {programs.length > 0 ? (
             <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {programs.map((program) => (
+              {programs.map((program: typeof programs[0]) => (
                 <StaggerItem key={program.id}>
                   <Link href={`/programs/${program.slug}`} className="block h-full">
                     <Card hover className="h-full flex flex-col">
@@ -122,17 +144,16 @@ export default async function ProgramsPage() {
         <Container className="text-center">
           <MotionDiv>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Want to Get Involved?
+              {ctaContent?.title || defaultContent.cta.title}
             </h2>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
-              Our programs thrive because of people like you. Whether you want to volunteer, 
-              partner, or support our work—there&apos;s a place for you.
+              {ctaContent?.body || defaultContent.cta.body}
             </p>
             <Link 
-              href="/contact"
+              href={ctaContent?.ctaLink || defaultContent.cta.ctaLink}
               className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity"
             >
-              Contact Us
+              {ctaContent?.ctaText || defaultContent.cta.ctaText}
             </Link>
           </MotionDiv>
         </Container>

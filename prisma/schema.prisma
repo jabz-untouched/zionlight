@@ -158,3 +158,356 @@ enum TextPosition {
   CENTER
   RIGHT
 }
+
+// ============================================
+// PAGE CONTENT MODEL
+// ============================================
+// Dynamic content for public pages (home, about, programs, etc.)
+// Each section is uniquely identified by pageId + sectionKey
+
+model PageContent {
+  id          String   @id @default(uuid()) @db.Uuid
+  pageId      String   // e.g., "home", "about", "programs", "gallery", "contact"
+  sectionKey  String   // e.g., "hero", "who-we-are", "vision", "mission", "hemer"
+  
+  title       String?
+  subtitle    String?
+  body        String   @db.Text // Main content (supports markdown/rich text)
+  
+  ctaText     String?  // Optional call-to-action button text
+  ctaLink     String?  // Optional call-to-action link
+  
+  imageUrl    String?  // Optional associated image
+  imageAlt    String?  // Alt text for the image
+  
+  order       Int      @default(0) // For ordering sections within a page
+  isActive    Boolean  @default(true)
+  
+  metadata    Json?    // Flexible additional data (icons, stats, etc.)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([pageId, sectionKey])
+  @@index([pageId, isActive])
+  @@map("page_contents")
+}
+
+// ============================================
+// SITE SETTINGS MODEL
+// ============================================
+// Global site configuration and content (footer, meta, etc.)
+
+model SiteSettings {
+  id          String   @id @default(uuid()) @db.Uuid
+  key         String   @unique // e.g., "footer-tagline", "site-name", "contact-email"
+  value       String   @db.Text
+  description String?  // Internal description for admins
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ============================================
+// BLOG CATEGORY MODEL
+// ============================================
+// Categories for organizing blog posts
+
+model BlogCategory {
+  id          String   @id @default(uuid()) @db.Uuid
+  slug        String   @unique
+  name        String   // Default English name
+  description String?  @db.Text
+  
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  
+  posts       BlogPost[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_categories")
+}
+
+// ============================================
+// BLOG TAG MODEL
+// ============================================
+// Tags for flexible categorization of blog posts
+
+model BlogTag {
+  id    String   @id @default(uuid()) @db.Uuid
+  slug  String   @unique
+  name  String   // Default English name
+  
+  posts BlogPost[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blog_tags")
+}
+
+// ============================================
+// BLOG POST MODEL
+// ============================================
+// Blog posts with i18n-ready translations
+
+model BlogPost {
+  id            String   @id @default(uuid()) @db.Uuid
+  slug          String   @unique
+  
+  featuredImage String?
+  
+  isPublished   Boolean  @default(false)
+  isFeatured    Boolean  @default(false)
+  publishedAt   DateTime?
+  
+  categoryId    String?  @db.Uuid
+  category      BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  
+  tags          BlogTag[]
+  translations  BlogPostTranslation[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isPublished, publishedAt])
+  @@index([categoryId])
+  @@map("blog_posts")
+}
+
+// ============================================
+// BLOG POST TRANSLATION MODEL
+// ============================================
+// Locale-specific content for blog posts
+
+model BlogPostTranslation {
+  id             String   @id @default(uuid()) @db.Uuid
+  blogPostId     String   @db.Uuid
+  locale         String   @default("en") // e.g., "en", "es", "fr"
+  
+  title          String
+  excerpt        String?  @db.Text
+  content        String   @db.Text // Rich text content
+  
+  seoTitle       String?
+  seoDescription String?  @db.Text
+  
+  blogPost       BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([blogPostId, locale])
+  @@index([locale])
+  @@map("blog_post_translations")
+}
+
+// ============================================
+// EVENT MODEL
+// ============================================
+// Events with i18n-ready translations
+
+model Event {
+  id                String   @id @default(uuid()) @db.Uuid
+  slug              String   @unique
+  
+  startDate         DateTime
+  endDate           DateTime?
+  
+  location          String?  // Physical address or "Virtual"
+  locationUrl       String?  // Google Maps link or virtual meeting link
+  
+  bannerImage       String?
+  
+  isPublished       Boolean  @default(false)
+  isFeatured        Boolean  @default(false)
+  allowRegistration Boolean  @default(true)
+  registrationClosed Boolean @default(false)
+  maxAttendees      Int?     // Optional capacity limit
+  
+  translations      EventTranslation[]
+  registrations     EventRegistration[]
+  registrationForm  EventRegistrationForm?
+  formSubmissions   EventFormSubmission[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([isPublished, startDate])
+  @@map("events")
+}
+
+// ============================================
+// EVENT TRANSLATION MODEL
+// ============================================
+// Locale-specific content for events
+
+model EventTranslation {
+  id             String   @id @default(uuid()) @db.Uuid
+  eventId        String   @db.Uuid
+  locale         String   @default("en")
+  
+  title          String
+  description    String   @db.Text
+  
+  seoTitle       String?
+  seoDescription String?  @db.Text
+  
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([eventId, locale])
+  @@index([locale])
+  @@map("event_translations")
+}
+
+// ============================================
+// EVENT REGISTRATION MODEL
+// ============================================
+// Registration records for events
+
+model EventRegistration {
+  id        String   @id @default(uuid()) @db.Uuid
+  eventId   String   @db.Uuid
+  
+  fullName  String
+  email     String
+  phone     String?
+  
+  notes     String?  @db.Text // Optional message from registrant
+  
+  status    RegistrationStatus @default(CONFIRMED)
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventId, email]) // Prevent duplicate registrations
+  @@index([eventId])
+  @@index([email])
+  @@map("event_registrations")
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+// ============================================
+// EVENT REGISTRATION FORM BUILDER
+// ============================================
+// Dynamic form definitions for event registrations
+
+model EventRegistrationForm {
+  id         String   @id @default(uuid()) @db.Uuid
+  eventId    String   @unique @db.Uuid
+  
+  isActive   Boolean  @default(true)
+  totalSteps Int      @default(1) // Multi-step form support
+  
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  fields     EventRegistrationField[]
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("event_registration_forms")
+}
+
+// ============================================
+// EVENT REGISTRATION FIELD
+// ============================================
+// Individual form fields with configurable types
+
+model EventRegistrationField {
+  id               String    @id @default(uuid()) @db.Uuid
+  formId           String    @db.Uuid
+  
+  label            String    // Question text shown to user
+  placeholder      String?   // Placeholder text for input
+  fieldType        FieldType // Type of input
+  options          Json?     // For select/checkbox: array of option strings
+  isRequired       Boolean   @default(false)
+  order            Int       @default(0)
+  step             Int       @default(1) // Multi-step form: which step this field belongs to
+  
+  // Conditional logic: show/hide based on another field's value
+  conditionalLogic Json?     // { dependsOnFieldId, operator, value }
+  
+  // File upload constraints (only for FILE type)
+  maxFileSize      Int?      // Max file size in bytes (default 10KB)
+  acceptedTypes    String?   // Comma-separated MIME types
+  
+  form             EventRegistrationForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([formId, order])
+  @@map("event_registration_fields")
+}
+
+enum FieldType {
+  TEXT
+  EMAIL
+  PHONE
+  TEXTAREA
+  SELECT
+  CHECKBOX
+  FILE
+}
+
+// ============================================
+// EVENT FORM SUBMISSION
+// ============================================
+// Stores dynamic form responses as JSON
+
+model EventFormSubmission {
+  id        String   @id @default(uuid()) @db.Uuid
+  eventId   String   @db.Uuid
+  formId    String   @db.Uuid
+  
+  responses Json     // Key-value pairs: { fieldId: value }
+  email     String?  // Extracted for duplicate checking
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  files     EventFormFile[]
+  
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, email]) // Prevent duplicate submissions per event
+  @@index([eventId])
+  @@index([formId])
+  @@map("event_form_submissions")
+}
+
+// ============================================
+// EVENT FORM FILE UPLOAD
+// ============================================
+// Stores metadata for uploaded files
+
+model EventFormFile {
+  id           String   @id @default(uuid()) @db.Uuid
+  submissionId String   @db.Uuid
+  fieldId      String   @db.Uuid // Which field this file belongs to
+  
+  fileName     String
+  fileSize     Int      // Size in bytes
+  mimeType     String
+  storageUrl   String   // URL to the stored file
+  
+  submission   EventFormSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  
+  createdAt    DateTime @default(now())
+
+  @@index([submissionId])
+  @@map("event_form_files")
+}
