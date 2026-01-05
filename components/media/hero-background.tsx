@@ -87,7 +87,7 @@ export function HeroSlider({
                 src={currentImage!.imageUrl}
                 alt={currentImage!.altText || currentImage!.title}
                 fill
-                className="object-cover"
+                className="object-cover opacity-75"
                 priority={currentIndex === 0}
                 sizes="100vw"
               />
