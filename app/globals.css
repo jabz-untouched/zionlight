@@ -90,13 +90,8 @@ p {
   max-width: 65ch;
 }
 
-/* Mobile touch target sizing - minimum 44px */
-a, button {
-  /* Ensure adequate touch target */
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
+/* Mobile touch target sizing - only applied to buttons and nav links via Tailwind classes */
+/* Using explicit classes like min-h-[44px] or min-h-11 in components instead of global rules */
 
 /* Override for inline text links */
 p a, li a, span a {

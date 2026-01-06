@@ -54,7 +54,7 @@ export default async function GalleryPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-12 sm:py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
         <Container className="relative z-10">
           <MotionDiv className="max-w-3xl">
@@ -75,7 +75,7 @@ export default async function GalleryPage() {
           {items.length > 0 ? (
             <GalleryGrid items={items} categories={categories} />
           ) : (
-            <div className="text-center py-12 sm:py-16 md:py-20">
+            <div className="text-center py-12 sm:py-20">
               <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-full bg-muted flex items-center justify-center">
                 <span className="text-2xl sm:text-3xl">📷</span>
               </div>

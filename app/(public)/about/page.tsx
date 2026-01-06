@@ -116,7 +116,7 @@ export default async function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-12 sm:py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
         <Container className="relative z-10">
           <MotionDiv className="max-w-3xl">
@@ -388,7 +388,7 @@ export default async function AboutPage() {
       )}
 
       {/* CTA Section */}
-      <MotionSection className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+      <MotionSection className="py-12 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
         <Container className="text-center px-4 sm:px-6">
           <MotionDiv>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">

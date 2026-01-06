@@ -27,7 +27,7 @@ export function Section({
   return (
     <section 
       id={id}
-      className={`py-12 md:py-16 lg:py-24 ${bgClasses[background]} ${className}`}
+      className={`py-12 sm:py-16 md:py-24 ${bgClasses[background]} ${className}`}
     >
       {children}
     </section>
@@ -86,7 +86,7 @@ export function SectionHeader({
     : "text-left";
 
   return (
-    <div className={`max-w-3xl mb-8 md:mb-12 lg:mb-16 ${alignClasses} ${className}`}>
+    <div className={`max-w-3xl mb-8 sm:mb-12 md:mb-16 ${alignClasses} ${className}`}>
       {subtitle && (
         <p className="text-xs sm:text-sm font-medium uppercase tracking-wider text-primary mb-2 sm:mb-3">
           {subtitle}
