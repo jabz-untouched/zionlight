@@ -14,6 +14,7 @@ const navItems = [
   { href: "/admin/gallery", label: "Gallery", icon: "🖼️" },
   { href: "/admin/media", label: "Media", icon: "🎨" },
   { href: "/admin/settings", label: "Settings", icon: "⚙️" },
+  { href: "/admin/manual", label: "Help & Manual", icon: "📖" },
 ];
 
 export function AdminSidebar() {
