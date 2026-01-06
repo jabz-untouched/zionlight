@@ -91,15 +91,15 @@ export default async function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
         <Container className="relative z-10">
           <MotionDiv className="max-w-3xl">
-            <Badge variant="primary" className="mb-4">Get in Touch</Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+            <Badge variant="primary" className="mb-3 sm:mb-4">Get in Touch</Badge>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
               {heroContent?.title || defaultContent.hero.title}
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
               {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
@@ -109,21 +109,21 @@ export default async function ContactPage() {
       {/* Contact Info + Form */}
       <Section>
         <Container>
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid gap-8 lg:gap-12 lg:grid-cols-3">
             {/* Contact Information */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 order-2 lg:order-1">
               <MotionDiv>
-                <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
-                <div className="space-y-6">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Get In Touch</h2>
+                <div className="space-y-4 sm:space-y-6">
                   {contactInfo.map((item, index) => (
                     <MotionDiv key={item.title} delay={index * 0.1}>
-                      <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                      <div className="flex gap-3 sm:gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                           {item.icon}
                         </div>
-                        <div>
-                          <h3 className="font-semibold mb-1">{item.title}</h3>
-                          <p className="text-muted-foreground whitespace-pre-line text-sm">
+                        <div className="min-w-0">
+                          <h3 className="font-semibold mb-1 text-sm sm:text-base">{item.title}</h3>
+                          <p className="text-muted-foreground whitespace-pre-line text-xs sm:text-sm break-words">
                             {item.content}
                           </p>
                         </div>
@@ -133,9 +133,9 @@ export default async function ContactPage() {
                 </div>
 
                 {/* Social Links */}
-                <div className="mt-8 pt-8 border-t border-border">
-                  <h3 className="font-semibold mb-4">Follow Us</h3>
-                  <div className="flex gap-3">
+                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border">
+                  <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Follow Us</h3>
+                  <div className="flex gap-2 sm:gap-3">
                     {(socialLinks.length > 0 ? socialLinks : [
                       { key: "facebook", url: "https://facebook.com" },
                       { key: "instagram", url: "https://instagram.com" },
@@ -146,7 +146,7 @@ export default async function ContactPage() {
                         href={social.url!}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                        className="w-11 h-11 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all"
                       >
                         <span className="sr-only">{social.key}</span>
                         {social.key === "facebook" && (
@@ -172,10 +172,10 @@ export default async function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-1 lg:order-2">
               <MotionDiv delay={0.2}>
-                <Card className="p-6 md:p-8">
-                  <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
+                <Card className="p-5 sm:p-6 md:p-8">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Send Us a Message</h2>
                   <ContactForm />
                 </Card>
               </MotionDiv>
@@ -188,15 +188,15 @@ export default async function ContactPage() {
       <Section background="muted">
         <Container>
           <MotionDiv>
-            <div className="rounded-2xl overflow-hidden bg-muted h-80 flex items-center justify-center border border-border">
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-muted h-60 sm:h-80 flex items-center justify-center border border-border">
+              <div className="text-center px-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Interactive map coming soon
                 </p>
               </div>

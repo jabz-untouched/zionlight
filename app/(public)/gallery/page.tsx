@@ -54,15 +54,15 @@ export default async function GalleryPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
         <Container className="relative z-10">
           <MotionDiv className="max-w-3xl">
-            <Badge variant="primary" className="mb-4">Our Moments</Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+            <Badge variant="primary" className="mb-3 sm:mb-4">Our Moments</Badge>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
               {heroContent?.title || defaultContent.hero.title}
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
               {heroContent?.body || defaultContent.hero.body}
             </p>
           </MotionDiv>
@@ -75,12 +75,12 @@ export default async function GalleryPage() {
           {items.length > 0 ? (
             <GalleryGrid items={items} categories={categories} />
           ) : (
-            <div className="text-center py-20">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center">
-                <span className="text-3xl">📷</span>
+            <div className="text-center py-12 sm:py-16 md:py-20">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-full bg-muted flex items-center justify-center">
+                <span className="text-2xl sm:text-3xl">📷</span>
               </div>
-              <h2 className="text-2xl font-semibold mb-2">No Images Yet</h2>
-              <p className="text-muted-foreground">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2">No Images Yet</h2>
+              <p className="text-sm sm:text-base text-muted-foreground">
                 We&apos;re working on adding photos. Check back soon!
               </p>
             </div>

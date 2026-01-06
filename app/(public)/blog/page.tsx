@@ -50,7 +50,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       {/* Hero Section */}
-      <Section className="bg-gradient-to-b from-primary/5 to-background py-16 lg:py-24">
+      <Section className="bg-gradient-to-b from-primary/5 to-background py-12 sm:py-16 lg:py-24">
         <Container>
           <SectionHeader
             title="Blog"
@@ -62,15 +62,15 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       {/* Categories Filter */}
       {categories.length > 0 && (
-        <Section className="border-b bg-background py-4">
+        <Section className="border-b bg-background py-3 sm:py-4">
           <Container>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
               <Link
                 href="/blog"
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`rounded-full px-3 py-2 sm:px-4 text-sm font-medium transition-colors whitespace-nowrap min-h-[40px] flex items-center ${
                   !categorySlug
                     ? "bg-primary text-primary-foreground"
-                    : "bg-muted hover:bg-muted/80"
+                    : "bg-muted hover:bg-muted/80 active:bg-muted/70"
                 }`}
               >
                 All Posts
@@ -79,10 +79,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 <Link
                   key={cat.id}
                   href={`/blog?category=${cat.slug}`}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`rounded-full px-3 py-2 sm:px-4 text-sm font-medium transition-colors whitespace-nowrap min-h-[40px] flex items-center ${
                     categorySlug === cat.slug
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted hover:bg-muted/80"
+                      : "bg-muted hover:bg-muted/80 active:bg-muted/70"
                   }`}
                 >
                   {cat.name}
@@ -94,21 +94,21 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       )}
 
       {/* Blog Posts Grid */}
-      <Section className="py-16">
+      <Section className="py-12 sm:py-16">
         <Container>
           {posts.length === 0 ? (
-            <div className="py-20 text-center">
-              <p className="text-lg text-muted-foreground">
+            <div className="py-16 sm:py-20 text-center">
+              <p className="text-base sm:text-lg text-muted-foreground">
                 No posts found. Check back soon!
               </p>
             </div>
           ) : (
             <>
-              <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <StaggerContainer className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => (
                   <StaggerItem key={post.id}>
                     <Link href={`/blog/${post.slug}`}>
-                      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg">
+                      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg active:scale-[0.98]">
                         {post.featuredImage && (
                           <div className="relative aspect-video overflow-hidden">
                             <Image
@@ -116,24 +116,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                               alt={post.translation?.title || "Blog post"}
                               fill
                               className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                           </div>
                         )}
-                        <div className="p-6">
+                        <div className="p-5 sm:p-6">
                           {post.category && (
                             <span className="mb-2 inline-block text-xs font-medium uppercase tracking-wider text-primary">
                               {post.category.name}
                             </span>
                           )}
-                          <h2 className="mb-2 text-xl font-semibold transition-colors group-hover:text-primary">
+                          <h2 className="mb-2 text-lg sm:text-xl font-semibold transition-colors group-hover:text-primary">
                             {post.translation?.title || "Untitled"}
                           </h2>
                           {post.translation?.excerpt && (
-                            <p className="mb-4 line-clamp-2 text-muted-foreground">
+                            <p className="mb-4 line-clamp-2 text-sm sm:text-base text-muted-foreground">
                               {post.translation.excerpt}
                             </p>
                           )}
-                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
                             {post.publishedAt && (
                               <time dateTime={post.publishedAt.toISOString()}>
                                 {new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -156,22 +157,22 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-12 flex items-center justify-center gap-2">
+                <div className="mt-8 sm:mt-12 flex items-center justify-center gap-2">
                   {currentPage > 1 && (
                     <Link
                       href={`/blog?${categorySlug ? `category=${categorySlug}&` : ""}page=${currentPage - 1}`}
-                      className="rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                      className="rounded-md border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted active:bg-muted/80 min-h-[44px] flex items-center"
                     >
                       Previous
                     </Link>
                   )}
-                  <span className="px-4 py-2 text-sm text-muted-foreground">
+                  <span className="px-3 sm:px-4 py-2 text-sm text-muted-foreground">
                     Page {currentPage} of {totalPages}
                   </span>
                   {currentPage < totalPages && (
                     <Link
                       href={`/blog?${categorySlug ? `category=${categorySlug}&` : ""}page=${currentPage + 1}`}
-                      className="rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                      className="rounded-md border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted active:bg-muted/80 min-h-[44px] flex items-center"
                     >
                       Next
                     </Link>

@@ -59,8 +59,9 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="grid md:grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
+      {/* Name and Email - stacked on mobile, side by side on desktop */}
+      <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
         {/* Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -69,14 +70,15 @@ export function ContactForm() {
           <input
             id="name"
             type="text"
+            autoComplete="name"
             {...register("name")}
-            className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+            className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors text-base ${
               errors.name ? "border-destructive" : "border-border"
             }`}
             placeholder="John Doe"
           />
           {errors.name && (
-            <p className="text-sm text-destructive mt-1">{errors.name.message}</p>
+            <p className="text-sm text-destructive mt-1.5">{errors.name.message}</p>
           )}
         </div>
 
@@ -88,14 +90,16 @@ export function ContactForm() {
           <input
             id="email"
             type="email"
+            autoComplete="email"
+            inputMode="email"
             {...register("email")}
-            className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+            className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors text-base ${
               errors.email ? "border-destructive" : "border-border"
             }`}
             placeholder="john@example.com"
           />
           {errors.email && (
-            <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
+            <p className="text-sm text-destructive mt-1.5">{errors.email.message}</p>
           )}
         </div>
       </div>
@@ -109,13 +113,13 @@ export function ContactForm() {
           id="subject"
           type="text"
           {...register("subject")}
-          className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+          className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors text-base ${
             errors.subject ? "border-destructive" : "border-border"
           }`}
           placeholder="How can we help?"
         />
         {errors.subject && (
-          <p className="text-sm text-destructive mt-1">{errors.subject.message}</p>
+          <p className="text-sm text-destructive mt-1.5">{errors.subject.message}</p>
         )}
       </div>
 
@@ -128,13 +132,13 @@ export function ContactForm() {
           id="message"
           rows={5}
           {...register("message")}
-          className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none ${
+          className={`w-full px-4 py-3 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none text-base ${
             errors.message ? "border-destructive" : "border-border"
           }`}
           placeholder="Tell us more about your inquiry..."
         />
         {errors.message && (
-          <p className="text-sm text-destructive mt-1">{errors.message.message}</p>
+          <p className="text-sm text-destructive mt-1.5">{errors.message.message}</p>
         )}
       </div>
 
@@ -142,7 +146,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full md:w-auto px-8 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full sm:w-auto px-8 py-3.5 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 active:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">

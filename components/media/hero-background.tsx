@@ -65,7 +65,7 @@ export function HeroSlider({
 
   return (
     <section className={cn(
-      "relative min-h-[90vh] flex items-center justify-center overflow-hidden",
+      "relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden",
       className
     )}>
       {/* Background Images Slider */}
@@ -102,41 +102,46 @@ export function HeroSlider({
 
           {/* Slide Navigation Dots */}
           {images.length > 1 && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+            <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3">
               {images.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={cn(
-                    "w-3 h-3 rounded-full transition-all duration-300",
+                    "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center",
                     index === currentIndex 
                       ? "bg-white scale-110" 
                       : "bg-white/40 hover:bg-white/60"
                   )}
                   aria-label={`Go to slide ${index + 1}`}
-                />
+                >
+                  <span className={cn(
+                    "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full",
+                    index === currentIndex ? "bg-white" : "bg-white/40"
+                  )} />
+                </button>
               ))}
             </div>
           )}
 
-          {/* Arrow Navigation */}
+          {/* Arrow Navigation - Hidden on small mobile, visible on larger screens */}
           {images.length > 1 && (
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/20 hover:bg-black/40 text-white transition-all duration-300 backdrop-blur-sm"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-black/20 hover:bg-black/40 active:bg-black/50 text-white transition-all duration-300 backdrop-blur-sm hidden sm:flex items-center justify-center min-w-[44px] min-h-[44px]"
                 aria-label="Previous slide"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/20 hover:bg-black/40 text-white transition-all duration-300 backdrop-blur-sm"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-black/20 hover:bg-black/40 active:bg-black/50 text-white transition-all duration-300 backdrop-blur-sm hidden sm:flex items-center justify-center min-w-[44px] min-h-[44px]"
                 aria-label="Next slide"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>

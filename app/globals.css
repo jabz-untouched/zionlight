@@ -65,6 +65,8 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent font size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -72,6 +74,45 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   min-height: 100dvh;
+  /* Mobile-first line height for readability */
+  line-height: 1.6;
+}
+
+/* Mobile-first typography improvements */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  /* Improved mobile reading */
+  max-width: 65ch;
+}
+
+/* Mobile touch target sizing - minimum 44px */
+a, button {
+  /* Ensure adequate touch target */
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Override for inline text links */
+p a, li a, span a {
+  min-height: auto;
+  display: inline;
+}
+
+/* Form inputs - mobile optimized */
+input, textarea, select {
+  font-size: 16px; /* Prevents iOS zoom on focus */
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+}
+
+textarea {
+  min-height: 120px;
 }
 
 /* Selection styling */
@@ -86,6 +127,38 @@ body {
   outline-offset: 2px;
 }
 
+/* Touch action optimization for interactive elements */
+.touch-action-manipulation {
+  touch-action: manipulation;
+}
+
+/* Safe area insets for notched devices */
+.safe-area-inset {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile scroll snap for carousels */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-item {
+  scroll-snap-align: start;
+}
+
+/* Hide scrollbar while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -95,5 +168,42 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Reduce heading sizes on mobile */
+  h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+  }
+  
+  /* Reduce section padding on mobile */
+  section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  /* Ensure paragraphs don't overflow */
+  p {
+    max-width: 100%;
+  }
+  
+  /* Improve button spacing on mobile */
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-group > * {
+    width: 100%;
   }
 }

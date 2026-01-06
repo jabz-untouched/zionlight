@@ -59,12 +59,12 @@ export async function Footer() {
 
   return (
     <footer className="border-t border-border/40 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 md:py-16">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Column */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="relative w-10 h-10 shrink-0">
+          <div className="col-span-2 lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-2 sm:gap-3 mb-4 min-h-[44px] touch-action-manipulation">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 shrink-0">
                 <Image
                   src="/logo.png"
                   alt="Zionlight Family Foundation"
@@ -72,20 +72,20 @@ export async function Footer() {
                   className="object-contain"
                 />
               </div>
-              <span className="font-semibold text-lg">Zionlight Family Foundation</span>
+              <span className="font-semibold text-base sm:text-lg">Zionlight Family Foundation</span>
             </Link>
-            <p className="text-muted-foreground max-w-md mb-6">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-md mb-5 sm:mb-6">
               {tagline}
             </p>
             {/* Social Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               {socialLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 rounded-full bg-foreground/5 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all touch-action-manipulation"
                   aria-label={link.label}
                 >
                   <SocialIcon name={link.icon} />
@@ -96,13 +96,13 @@ export async function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4">Quick Links</h3>
+            <ul className="space-y-2 sm:space-y-3">
               {footerLinks.organization.map((link) => (
                 <li key={link.href}>
                   <Link 
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-flex items-center min-h-[44px] sm:min-h-0 text-sm sm:text-base text-muted-foreground hover:text-primary active:scale-95 transition-all touch-action-manipulation"
                   >
                     {link.label}
                   </Link>
@@ -113,13 +113,13 @@ export async function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4">Legal</h3>
+            <ul className="space-y-2 sm:space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
                   <Link 
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-flex items-center min-h-[44px] sm:min-h-0 text-sm sm:text-base text-muted-foreground hover:text-primary active:scale-95 transition-all touch-action-manipulation"
                   >
                     {link.label}
                   </Link>
@@ -130,12 +130,12 @@ export async function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border/50">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
+        <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-border/50">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-center sm:text-left">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               © {new Date().getFullYear()} Zionlight Family Foundation. All rights reserved.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               A registered 501(c)(3) non-profit organization
             </p>
           </div>

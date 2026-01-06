@@ -101,7 +101,7 @@ export function EventRegistrationForm({
   }
 
   return (
-    <Card className="p-6">
+    <Card className="p-5 sm:p-6">
       <h3 className="mb-4 text-lg font-semibold">Register for this Event</h3>
       
       {spotsLeft !== null && spotsLeft <= 10 && spotsLeft > 0 && (
@@ -118,62 +118,67 @@ export function EventRegistrationForm({
 
       <form onSubmit={handleSubmit(onSubmit)} onFocus={handleFormFocus} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1.5 block text-sm font-medium">
             Full Name <span className="text-destructive">*</span>
           </label>
           <input
             {...register("fullName")}
             type="text"
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-primary"
+            autoComplete="name"
+            className="w-full rounded-md border border-border bg-background px-4 py-3 text-base outline-none transition-colors focus:ring-2 focus:ring-primary"
             placeholder="John Doe"
           />
           {errors.fullName && (
-            <p className="mt-1 text-xs text-destructive">
+            <p className="mt-1.5 text-xs text-destructive">
               {errors.fullName.message}
             </p>
           )}
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1.5 block text-sm font-medium">
             Email <span className="text-destructive">*</span>
           </label>
           <input
             {...register("email")}
             type="email"
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-primary"
+            autoComplete="email"
+            inputMode="email"
+            className="w-full rounded-md border border-border bg-background px-4 py-3 text-base outline-none transition-colors focus:ring-2 focus:ring-primary"
             placeholder="john@example.com"
           />
           {errors.email && (
-            <p className="mt-1 text-xs text-destructive">
+            <p className="mt-1.5 text-xs text-destructive">
               {errors.email.message}
             </p>
           )}
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">Phone</label>
+          <label className="mb-1.5 block text-sm font-medium">Phone</label>
           <input
             {...register("phone")}
             type="tel"
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-primary"
+            autoComplete="tel"
+            inputMode="tel"
+            className="w-full rounded-md border border-border bg-background px-4 py-3 text-base outline-none transition-colors focus:ring-2 focus:ring-primary"
             placeholder="+1 (555) 123-4567"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1.5 block text-sm font-medium">
             Notes or Questions
           </label>
           <textarea
             {...register("notes")}
             rows={3}
-            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-primary"
+            className="w-full rounded-md border border-border bg-background px-4 py-3 text-base outline-none transition-colors focus:ring-2 focus:ring-primary resize-none"
             placeholder="Any dietary restrictions, accessibility needs, or questions..."
           />
         </div>
 
-        <Button type="submit" className="w-full" loading={isSubmitting}>
+        <Button type="submit" className="w-full min-h-[48px]" loading={isSubmitting}>
           Register Now
         </Button>
 

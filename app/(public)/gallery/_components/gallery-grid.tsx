@@ -23,10 +23,10 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
     <>
       {/* Category Filter */}
       {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex gap-2 mb-6 sm:mb-8 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`shrink-0 px-4 py-2 min-h-[44px] rounded-full text-sm font-medium transition-colors touch-action-manipulation active:scale-95 ${
               selectedCategory === null 
                 ? "bg-primary text-primary-foreground" 
                 : "bg-muted hover:bg-muted/80"
@@ -38,7 +38,7 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`shrink-0 px-4 py-2 min-h-[44px] rounded-full text-sm font-medium transition-colors touch-action-manipulation active:scale-95 ${
                 selectedCategory === category 
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted hover:bg-muted/80"
@@ -53,7 +53,7 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
       {/* Image Grid */}
       <motion.div 
         layout
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4"
       >
         <AnimatePresence mode="popLayout">
           {filteredItems.map((item) => (
@@ -64,12 +64,12 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className={`relative group cursor-pointer ${
+              className={`relative group cursor-pointer touch-action-manipulation ${
                 item.isFeatured ? "md:col-span-2 md:row-span-2" : ""
               }`}
               onClick={() => setSelectedImage(item)}
             >
-              <div className={`relative overflow-hidden rounded-xl bg-muted ${
+              <div className={`relative overflow-hidden rounded-lg sm:rounded-xl bg-muted ${
                 item.isFeatured ? "aspect-square" : "aspect-square"
               }`}>
                 <Image
@@ -77,14 +77,16 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
                   alt={item.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <h3 className="text-white font-medium text-sm line-clamp-1">
+                {/* Always show title on mobile, hover on desktop */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 sm:translate-y-4 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300">
+                  <h3 className="text-white font-medium text-xs sm:text-sm line-clamp-1">
                     {item.title}
                   </h3>
                   {item.category && (
-                    <p className="text-white/70 text-xs mt-1">{item.category}</p>
+                    <p className="hidden sm:block text-white/70 text-xs mt-1">{item.category}</p>
                   )}
                 </div>
               </div>
@@ -100,7 +102,7 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-3 sm:p-4"
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
@@ -114,7 +116,7 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
               {/* Close Button */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors"
+                className="absolute -top-10 sm:-top-12 right-0 w-11 h-11 flex items-center justify-center text-white/80 hover:text-white active:scale-95 transition-all touch-action-manipulation z-10"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -123,21 +125,22 @@ export function GalleryGrid({ items, categories }: GalleryGridProps) {
 
               {/* Image */}
               <div className="relative flex-1 min-h-0">
-                <div className="relative w-full h-[60vh] md:h-[70vh]">
+                <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh]">
                   <Image
                     src={selectedImage.imageUrl}
                     alt={selectedImage.title}
                     fill
                     className="object-contain"
+                    sizes="100vw"
                   />
                 </div>
               </div>
 
               {/* Image Info */}
-              <div className="mt-4 text-white">
-                <h2 className="text-xl font-semibold">{selectedImage.title}</h2>
+              <div className="mt-3 sm:mt-4 text-white">
+                <h2 className="text-lg sm:text-xl font-semibold">{selectedImage.title}</h2>
                 {selectedImage.description && (
-                  <p className="text-white/70 mt-2">{selectedImage.description}</p>
+                  <p className="text-sm sm:text-base text-white/70 mt-2">{selectedImage.description}</p>
                 )}
                 <div className="flex flex-wrap gap-2 mt-3">
                   {selectedImage.category && (

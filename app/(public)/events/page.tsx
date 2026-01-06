@@ -59,7 +59,7 @@ function EventCard({ event, isPast = false }: EventCardProps) {
 
   return (
     <Link href={`/events/${event.slug}`}>
-      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg">
+      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg active:scale-[0.98]">
         {event.bannerImage && (
           <div className="relative aspect-video overflow-hidden">
             <Image
@@ -67,44 +67,45 @@ function EventCard({ event, isPast = false }: EventCardProps) {
               alt={event.translation?.title || "Event"}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             {isPast && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <span className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-800">
+                <span className="rounded-full bg-white/90 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-gray-800">
                   Past Event
                 </span>
               </div>
             )}
           </div>
         )}
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           {/* Date badge */}
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-14 w-14 flex-col items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <span className="text-xs font-medium uppercase">
+          <div className="mb-3 sm:mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 flex-col items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <span className="text-[10px] sm:text-xs font-medium uppercase">
                 {new Date(event.startDate).toLocaleDateString("en-US", { month: "short" })}
               </span>
-              <span className="text-xl font-bold">
+              <span className="text-lg sm:text-xl font-bold">
                 {new Date(event.startDate).getDate()}
               </span>
             </div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-xs sm:text-sm text-muted-foreground">
               <p>{formatEventTime(event.startDate)}</p>
-              {event.location && <p className="truncate">{event.location}</p>}
+              {event.location && <p className="truncate max-w-[180px] sm:max-w-none">{event.location}</p>}
             </div>
           </div>
 
-          <h2 className="mb-2 text-xl font-semibold transition-colors group-hover:text-primary">
+          <h2 className="mb-2 text-lg sm:text-xl font-semibold transition-colors group-hover:text-primary">
             {event.translation?.title || "Untitled Event"}
           </h2>
 
           {event.translation?.description && (
-            <p className="mb-4 line-clamp-2 text-muted-foreground">
+            <p className="mb-4 line-clamp-2 text-sm sm:text-base text-muted-foreground">
               {event.translation.description}
             </p>
           )}
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between min-h-[32px]">
             {canRegister && (
               <span className="text-sm font-medium text-primary">
                 Register Now →
@@ -141,7 +142,7 @@ export default async function EventsPage() {
   return (
     <>
       {/* Hero Section */}
-      <Section className="bg-gradient-to-b from-primary/5 to-background py-16 lg:py-24">
+      <Section className="bg-gradient-to-b from-primary/5 to-background py-12 sm:py-16 lg:py-24">
         <Container>
           <SectionHeader
             title="Events"
@@ -152,17 +153,17 @@ export default async function EventsPage() {
       </Section>
 
       {/* Upcoming Events */}
-      <Section className="py-16">
+      <Section className="py-12 sm:py-16">
         <Container>
-          <h2 className="mb-8 text-2xl font-bold">Upcoming Events</h2>
+          <h2 className="mb-6 sm:mb-8 text-xl sm:text-2xl font-bold">Upcoming Events</h2>
           {upcomingEvents.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-12 text-center">
-              <p className="text-lg text-muted-foreground">
+            <div className="rounded-lg border border-dashed p-8 sm:p-12 text-center">
+              <p className="text-base sm:text-lg text-muted-foreground">
                 No upcoming events at the moment. Check back soon!
               </p>
             </div>
           ) : (
-            <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <StaggerContainer className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
               {upcomingEvents.map((event) => (
                 <StaggerItem key={event.id}>
                   <EventCard event={event} />
@@ -175,10 +176,10 @@ export default async function EventsPage() {
 
       {/* Past Events */}
       {pastEvents.length > 0 && (
-        <Section className="border-t bg-muted/30 py-16">
+        <Section className="border-t bg-muted/30 py-12 sm:py-16">
           <Container>
-            <h2 className="mb-8 text-2xl font-bold">Past Events</h2>
-            <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <h2 className="mb-6 sm:mb-8 text-xl sm:text-2xl font-bold">Past Events</h2>
+            <StaggerContainer className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
               {pastEvents.map((event) => (
                 <StaggerItem key={event.id}>
                   <EventCard event={event} isPast />

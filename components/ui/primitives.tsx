@@ -27,7 +27,7 @@ export function Section({
   return (
     <section 
       id={id}
-      className={`py-16 md:py-24 ${bgClasses[background]} ${className}`}
+      className={`py-12 md:py-16 lg:py-24 ${bgClasses[background]} ${className}`}
     >
       {children}
     </section>
@@ -86,17 +86,17 @@ export function SectionHeader({
     : "text-left";
 
   return (
-    <div className={`max-w-3xl mb-12 md:mb-16 ${alignClasses} ${className}`}>
+    <div className={`max-w-3xl mb-8 md:mb-12 lg:mb-16 ${alignClasses} ${className}`}>
       {subtitle && (
-        <p className="text-sm font-medium uppercase tracking-wider text-primary mb-3">
+        <p className="text-xs sm:text-sm font-medium uppercase tracking-wider text-primary mb-2 sm:mb-3">
           {subtitle}
         </p>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
         {title}
       </h2>
       {description && (
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+        <p className="mt-3 sm:mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
           {description}
         </p>
       )}
@@ -105,7 +105,7 @@ export function SectionHeader({
 }
 
 /**
- * Button - A versatile button component
+ * Button - A versatile button component with mobile-first touch targets
  */
 interface ButtonProps {
   children: ReactNode;
@@ -116,6 +116,7 @@ interface ButtonProps {
   type?: "button" | "submit";
   disabled?: boolean;
   onClick?: () => void;
+  fullWidthMobile?: boolean;
 }
 
 export function Button({ 
@@ -127,23 +128,27 @@ export function Button({
   type = "button",
   disabled = false,
   onClick,
+  fullWidthMobile = false,
 }: ButtonProps) {
-  const baseClasses = "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  const baseClasses = "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none touch-action-manipulation";
   
   const variantClasses = {
-    primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-md hover:shadow-lg",
-    secondary: "bg-secondary text-secondary-foreground hover:opacity-90",
-    outline: "border-2 border-foreground/20 hover:border-primary hover:text-primary bg-transparent",
-    ghost: "hover:bg-muted",
+    primary: "bg-primary text-primary-foreground hover:opacity-90 active:opacity-80 shadow-md hover:shadow-lg",
+    secondary: "bg-secondary text-secondary-foreground hover:opacity-90 active:opacity-80",
+    outline: "border-2 border-foreground/20 hover:border-primary hover:text-primary active:bg-primary/5 bg-transparent",
+    ghost: "hover:bg-muted active:bg-muted/80",
   };
 
+  // Mobile-first sizing with minimum 44px touch targets
   const sizeClasses = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-6 py-3 text-base",
-    lg: "px-8 py-4 text-lg",
+    sm: "px-4 py-2.5 text-sm min-h-[44px]",
+    md: "px-5 py-3 text-base min-h-[44px] sm:px-6",
+    lg: "px-6 py-3.5 text-base min-h-[48px] sm:px-8 sm:py-4 sm:text-lg",
   };
 
-  const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+  const mobileFullWidth = fullWidthMobile ? "w-full sm:w-auto" : "";
+
+  const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${mobileFullWidth} ${className}`;
 
   if (href) {
     return (
@@ -166,7 +171,7 @@ export function Button({
 }
 
 /**
- * Card - A styled card container
+ * Card - A styled card container with mobile optimization
  */
 interface CardProps {
   children: ReactNode;
@@ -179,7 +184,7 @@ export function Card({ children, className = "", hover = false }: CardProps) {
     <div 
       className={`
         bg-background rounded-xl border border-border/50 overflow-hidden
-        ${hover ? "transition-all duration-300 hover:shadow-lg hover:border-border hover:-translate-y-1" : ""}
+        ${hover ? "transition-all duration-300 hover:shadow-lg hover:border-border sm:hover:-translate-y-1 active:scale-[0.98]" : ""}
         ${className}
       `}
     >
