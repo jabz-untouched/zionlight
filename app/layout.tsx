@@ -46,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="DUrjufJQIksTO5XB7Tb2sPA0MeFbh9nV2DwRQ2oG95k" />
         {/* Analytics script - loads non-blocking after page interactive */}
         <AnalyticsScript />
       </head>
